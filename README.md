@@ -25,7 +25,7 @@ retrigenix/
 │── backend/
 │   ├── main.py            # FastAPI app
 │   ├── retriever.py       # Runs document embedding and storage
-│   ├── model.py           # LLM integration with OpenAI
+│ 
 │   ├── requirements.txt   # Backend dependencies
 │── docs/                  # Uploaded documents
 │── chroma_data/           # ChromaDB vector storage
