@@ -3,4 +3,5 @@ venv/
 .env
 
 chroma_data/
+
 rag-chatbot-frontend/
