@@ -72,6 +72,9 @@ review_chain = (
     | output_parser
 )
 
+
+
 # # context = "I had a great stay!"
+# question = "Who are the cardiology specialists?"
 # question = "Who are the cardiology specialists?"
 # print(review_chain.invoke(question))
