@@ -25,6 +25,8 @@ venv/
 env/
 ENV/
 .env
+.env.*
+!.env.example
 .venv
 env.bak/
 venv.bak/
@@ -40,6 +42,9 @@ venv.bak/
 *.log
 logs/
 log/
+app.log
+debug.log
+error.log
 
 # Database
 *.db
@@ -67,4 +72,12 @@ var/
 wheels/
 *.egg-info/
 .installed.cfg
-*.egg 
+*.egg
+
+# Secrets and sensitive data
+secrets.json
+credentials.json
+*.pem
+*.key
+*.cert
+*.crt 
