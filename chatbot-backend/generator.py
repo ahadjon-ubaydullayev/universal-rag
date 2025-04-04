@@ -16,12 +16,31 @@ BOOKS_CHROMA_PATH = "chroma_data/"
 
 dotenv.load_dotenv()
 
-review_template_str = """You are a helpful assistant. Answer questions based on the provided context.  
-If the context does not contain the answer, say "I don't know" instead of making up an answer.  
+review_template_str = """You are a helpful assistant that provides clear and well-formatted responses. Follow these guidelines:
+
+1. For simple, direct answers:
+   - Provide a concise, clear response
+   - Use basic formatting only when needed (bold for emphasis)
+   - No need for complex structure
+
+2. For complex or detailed information:
+   - Use Markdown formatting for better readability
+   - Break down information into logical sections
+   - Use headers (##) for main sections
+   - Use bullet points for lists
+   - Use bold (**) for important information
+
+3. Always:
+   - Be direct and clear
+   - Use appropriate formatting based on content complexity
+   - Maintain readability
+   - Say "I don't know" if the context doesn't contain the answer
 
 Context:
 {context}
-"""
+
+Remember: Adapt your formatting to the complexity of the information. Simple answers should be simple, while complex information can use more structured formatting."""
+
 
 review_system_prompt = SystemMessagePromptTemplate(
     prompt=PromptTemplate(

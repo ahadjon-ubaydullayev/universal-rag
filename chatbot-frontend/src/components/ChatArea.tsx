@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import {
   Box,
   VStack,
@@ -6,22 +6,36 @@ import {
   Input,
   Button,
   Text,
-  Flex,
   useToast,
+  Spinner,
+  useColorModeValue,
+  Flex,
 } from '@chakra-ui/react'
-import axios from 'axios'
+import ReactMarkdown from 'react-markdown'
+import { apiService } from '../services/api'
+import { config } from '../config'
 
 interface Message {
   text: string
   isUser: boolean
+  timestamp: Date
 }
 
-const ChatArea = () => {
-  const [messages, setMessages] = useState<Message[]>([])
-  const [input, setInput] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
+interface ChatAreaProps {
+  messages: Message[]
+  setMessages: React.Dispatch<React.SetStateAction<Message[]>>
+}
+
+const ChatArea: React.FC<ChatAreaProps> = ({ messages, setMessages }) => {
+  const [input, setInput] = React.useState('')
+  const [isLoading, setIsLoading] = React.useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const toast = useToast()
+
+  const bgColor = useColorModeValue('white', 'gray.800')
+  const userMessageBg = useColorModeValue('blue.100', 'blue.900')
+  const botMessageBg = useColorModeValue('gray.100', 'gray.700')
+  const borderColor = useColorModeValue('gray.200', 'gray.600')
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -31,26 +45,34 @@ const ChatArea = () => {
     scrollToBottom()
   }, [messages])
 
-  const handleSendMessage = async () => {
-    if (!input.trim()) return
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return
 
-    const userMessage = input.trim()
+    const userMessage: Message = {
+      text: input.trim(),
+      isUser: true,
+      timestamp: new Date(),
+    }
+
+    setMessages(prev => [...prev, userMessage])
     setInput('')
-    setMessages(prev => [...prev, { text: userMessage, isUser: true }])
     setIsLoading(true)
 
     try {
-      const response = await axios.post('http://localhost:8000/generate/', {
-        question: userMessage
-      })
-
-      setMessages(prev => [...prev, { text: response.data.response, isUser: false }])
+      const response = await apiService.generateResponse(input.trim())
+      const botMessage: Message = {
+        text: response,
+        isUser: false,
+        timestamp: new Date(),
+      }
+      setMessages(prev => [...prev, botMessage])
     } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : config.DEFAULT_ERROR_MESSAGE
       toast({
         title: 'Error',
-        description: 'Failed to get response from the server',
+        description: errorMessage,
         status: 'error',
-        duration: 3000,
+        duration: 5000,
         isClosable: true,
       })
     } finally {
@@ -60,12 +82,20 @@ const ChatArea = () => {
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
-      handleSendMessage()
+      e.preventDefault()
+      handleSend()
     }
   }
 
   return (
-    <Box flex={1} bg="white" borderRadius="lg" boxShadow="sm" display="flex" flexDirection="column">
+    <Box
+      flex={1}
+      bg={bgColor}
+      borderRadius="lg"
+      boxShadow="sm"
+      display="flex"
+      flexDirection="column"
+    >
       <Box flex={1} overflowY="auto" p={4}>
         <VStack spacing={4} align="stretch">
           {messages.map((message, index) => (
@@ -74,28 +104,47 @@ const ChatArea = () => {
               justify={message.isUser ? 'flex-end' : 'flex-start'}
             >
               <Box
-                maxW="70%"
-                bg={message.isUser ? 'blue.500' : 'gray.100'}
-                color={message.isUser ? 'white' : 'black'}
+                maxW="80%"
+                bg={message.isUser ? userMessageBg : botMessageBg}
                 p={3}
                 borderRadius="lg"
                 boxShadow="sm"
               >
-                <Text>{message.text}</Text>
+                {message.isUser ? (
+                  <Text>{message.text}</Text>
+                ) : (
+                  <ReactMarkdown>{message.text}</ReactMarkdown>
+                )}
+                <Text
+                  fontSize="xs"
+                  color="gray.500"
+                  mt={1}
+                  textAlign="right"
+                >
+                  {message.timestamp.toLocaleTimeString()}
+                </Text>
               </Box>
             </Flex>
           ))}
           {isLoading && (
             <Flex justify="flex-start">
-              <Box bg="gray.100" p={3} borderRadius="lg">
-                <Text>Thinking...</Text>
+              <Box
+                bg={botMessageBg}
+                p={3}
+                borderRadius="lg"
+                boxShadow="sm"
+              >
+                <HStack>
+                  <Spinner size="sm" />
+                  <Text>Thinking...</Text>
+                </HStack>
               </Box>
             </Flex>
           )}
           <div ref={messagesEndRef} />
         </VStack>
       </Box>
-      <Box p={4} borderTop="1px" borderColor="gray.200">
+      <Box p={4} borderTop="1px" borderColor={borderColor}>
         <HStack>
           <Input
             value={input}
@@ -103,10 +152,11 @@ const ChatArea = () => {
             onKeyPress={handleKeyPress}
             placeholder="Type your message..."
             disabled={isLoading}
+            maxLength={config.MAX_MESSAGE_LENGTH}
           />
           <Button
             colorScheme="blue"
-            onClick={handleSendMessage}
+            onClick={handleSend}
             isLoading={isLoading}
             disabled={!input.trim() || isLoading}
           >
