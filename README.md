@@ -1,71 +1,176 @@
-# RAG Chatbot Backend
+# Universal RAG Chatbot
 
-## 🚀 Overview
-This is the **backend** for a **Retrieval-Augmented Generation (RAG) chatbot** designed to answer questions about various entities such as hospitals, universities, and agencies. It integrates **FastAPI, ChromaDB, and OpenAI’s GPT-3.5 Turbo** to provide accurate responses based on uploaded documents.
+A modern, secure, and responsive RAG (Retrieval-Augmented Generation) chatbot application with a React frontend and FastAPI backend.
 
-## 🛠 Features
-- **Document-Based Q&A**: Answers questions using **PDF, DOC, CSV** files as context.
-- **Fast & Scalable**: Built with **FastAPI** for high-performance API responses.
-- **LLM Integration**: Uses **GPT-3.5 Turbo** for natural language responses.
-- **Vector Search with ChromaDB**: Stores document embeddings for efficient retrieval.
-- **Environment Configuration**: Uses **dotenv** for managing API keys and configurations.
+## Features
 
-## 📌 Tech Stack
-- **FastAPI** - Backend framework
-- **ChromaDB** - Vector database for retrieval
-- **LangChain** - LLM and retrieval pipeline
-- **OpenAI GPT-3.5 Turbo** - Chat model
-- **Python-dotenv** - Environment variable management
-- **pypdf** - PDF document parsing
-- **SQLAlchemy** - Future database integration
+- **Modern UI**: Built with React, TypeScript, and Chakra UI
+- **Responsive Design**: Works on desktop and mobile devices
+- **Dark Mode**: Built-in dark/light theme support
+- **Security**: API key authentication, rate limiting, and input sanitization
+- **Real-time Chat**: Interactive chat interface with markdown support
+- **Sample Questions**: Quick access to common queries
+- **Error Handling**: Comprehensive error handling and user feedback
+- **Logging**: Secure logging with sensitive data masking
 
-## 📂 Project Structure
-```
-retrigenix/
-│── backend/
-│   ├── main.py            # FastAPI app
-│   ├── retriever.py       # Runs document embedding and storage
-│ 
-│   ├── requirements.txt   # Backend dependencies
-│── docs/                  # Uploaded documents
-│── chroma_data/           # ChromaDB vector storage
-│── .env                   # API keys and settings
-```
+## Tech Stack
 
-## ⚡ Installation & Setup
-1️⃣ **Clone the repository**
-```sh
-git clone https://github.com/yourusername/retrigenix.git
-cd retrigenix/backend
-```
+### Frontend
+- React + TypeScript
+- Chakra UI for components and styling
+- Vite for build tooling
+- React Markdown for message rendering
 
-2️⃣ **Create a virtual environment and install dependencies**
-```sh
+### Backend
+- FastAPI
+- Python 3.8+
+- Pydantic for data validation
+- OpenAI API integration
+- Rate limiting with slowapi
+- Secure logging
+
+## Security Features
+
+- API Key Authentication
+- Request Size Limits
+- Input Sanitization
+- Rate Limiting
+- CORS Configuration
+- Sensitive Data Masking in Logs
+- Environment-based Configuration
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 16+
+- Python 3.8+
+- OpenAI API Key
+
+### Backend Setup
+
+1. Create and activate a virtual environment:
+```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
+```
+
+2. Install dependencies:
+```bash
+cd chatbot-backend
 pip install -r requirements.txt
 ```
 
-3️⃣ **Set up environment variables**
-Create a `.env` file and add your API keys:
-```ini
-OPENAI_API_KEY=your_openai_api_key
+3. Create a `.env` file:
+```env
+API_KEY=your_openai_api_key
+API_KEY_HEADER=X-API-Key
+CORS_ORIGINS=http://localhost:5173,https://your-production-domain.com
+MAX_REQUEST_SIZE=1048576
+MAX_QUESTION_LENGTH=1000
+RATE_LIMIT_GENERATE=10/minute
+RATE_LIMIT_CHAT=30/minute
+RATE_LIMIT_HEALTH=60/minute
+DEVELOPMENT_MODE=true
 ```
 
-## ▶️ Running the Backend
-Start the FastAPI server:
-```sh
+4. Start the backend server:
+```bash
 uvicorn main:app --reload
 ```
-API will be available at: **`http://127.0.0.1:8000`**
 
-## 📥 Adding Documents
-**Every time you upload new documents, you must run `retriever.py`** to update the vector database:
-```sh
-python retriever.py
+### Frontend Setup
+
+1. Install dependencies:
+```bash
+cd chatbot-frontend
+npm install
 ```
 
-This ensures that newly uploaded documents are indexed for retrieval.
+2. Create a `.env` file:
+```env
+VITE_API_BASE_URL=http://localhost:8000
+VITE_API_KEY=your_api_key
+```
+
+3. Start the development server:
+```bash
+npm run dev
+```
+
+## Project Structure
+
+```
+.
+├── chatbot-backend/
+│   ├── main.py              # FastAPI application
+│   ├── config.py            # Configuration and settings
+│   ├── logger.py            # Logging configuration
+│   ├── security.py          # Security middleware
+│   ├── requirements.txt     # Python dependencies
+│   └── .env                 # Environment variables
+├── chatbot-frontend/
+│   ├── src/
+│   │   ├── components/      # React components
+│   │   ├── services/        # API services
+│   │   ├── config.ts        # Frontend configuration
+│   │   └── theme.ts         # Chakra UI theme
+│   ├── package.json         # Node dependencies
+│   └── .env                 # Frontend environment variables
+└── README.md
+```
+
+## Security Best Practices
+
+1. **API Keys**:
+   - Never commit API keys to version control
+   - Use environment variables
+   - Rotate keys regularly
+   - Mask sensitive data in logs
+
+2. **Rate Limiting**:
+   - Configure appropriate limits per endpoint
+   - Monitor and adjust based on usage
+
+3. **Input Validation**:
+   - Sanitize all user inputs
+   - Validate request sizes
+   - Use Pydantic models for data validation
+
+4. **CORS**:
+   - Configure allowed origins
+   - Use environment variables for flexibility
+
+## Development vs Production
+
+### Development Mode
+- API key checks are optional
+- More verbose logging
+- CORS allows localhost
+
+### Production Mode
+- Strict API key validation
+- Minimal logging
+- Restricted CORS origins
+- Rate limiting enabled
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Commit your changes
+4. Push to the branch
+5. Create a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Acknowledgments
+
+- OpenAI for the API
+- FastAPI team for the excellent framework
+- Chakra UI for the component library
 
 ---
 📌 **Stay tuned for more updates!** 🚀
