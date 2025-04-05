@@ -12,6 +12,7 @@ A modern, secure, and responsive RAG (Retrieval-Augmented Generation) chatbot ap
 - **Sample Questions**: Quick access to common queries
 - **Error Handling**: Comprehensive error handling and user feedback
 - **Logging**: Secure logging with sensitive data masking
+- **Docker Support**: Easy deployment with Docker containers
 
 ## Tech Stack
 
@@ -46,8 +47,11 @@ A modern, secure, and responsive RAG (Retrieval-Augmented Generation) chatbot ap
 - Node.js 16+
 - Python 3.8+
 - OpenAI API Key
+- Docker and Docker Compose (for containerized deployment)
 
-### Backend Setup
+### Option 1: Local Development Setup
+
+#### Backend Setup
 
 1. Create and activate a virtual environment:
 ```bash
@@ -79,7 +83,7 @@ DEVELOPMENT_MODE=true
 uvicorn main:app --reload
 ```
 
-### Frontend Setup
+#### Frontend Setup
 
 1. Install dependencies:
 ```bash
@@ -98,6 +102,55 @@ VITE_API_KEY=your_api_key
 npm run dev
 ```
 
+### Option 2: Docker Deployment
+
+1. Create a `.env` file in the root directory:
+```env
+OPENAI_API_KEY=your_openai_api_key
+API_KEY_HEADER=X-API-Key
+```
+
+2. Build and start the containers:
+```bash
+docker-compose up --build
+```
+
+3. Access the application:
+- Frontend: http://localhost:5173
+- Backend API: http://localhost:8000
+
+#### Docker Commands
+
+- Build and start all services:
+```bash
+docker-compose up --build
+```
+
+- Start services in detached mode:
+```bash
+docker-compose up -d
+```
+
+- Stop all services:
+```bash
+docker-compose down
+```
+
+- View logs:
+```bash
+docker-compose logs -f
+```
+
+- Rebuild a specific service:
+```bash
+docker-compose up --build frontend  # or backend
+```
+
+- Restart a specific service:
+```bash
+docker-compose restart frontend  # or backend
+```
+
 ## Project Structure
 
 ```
@@ -108,6 +161,7 @@ npm run dev
 │   ├── logger.py            # Logging configuration
 │   ├── security.py          # Security middleware
 │   ├── requirements.txt     # Python dependencies
+│   ├── Dockerfile           # Backend Docker configuration
 │   └── .env                 # Environment variables
 ├── chatbot-frontend/
 │   ├── src/
@@ -116,7 +170,9 @@ npm run dev
 │   │   ├── config.ts        # Frontend configuration
 │   │   └── theme.ts         # Chakra UI theme
 │   ├── package.json         # Node dependencies
+│   ├── Dockerfile           # Frontend Docker configuration
 │   └── .env                 # Frontend environment variables
+├── docker-compose.yml       # Docker Compose configuration
 └── README.md
 ```
 

@@ -1,0 +1,16 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+env
+venv
+.env
+*.log
+chroma_data/*
+!chroma_data/.gitkeep
+logs/*
+!logs/.gitkeep
+.git
+.gitignore
+README.md 

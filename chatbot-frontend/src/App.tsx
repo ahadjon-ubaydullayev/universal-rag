@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { ChakraProvider, Box, Flex, Container, ColorModeScript } from '@chakra-ui/react'
 import { theme } from './theme'
 import Navbar from './components/Navbar'

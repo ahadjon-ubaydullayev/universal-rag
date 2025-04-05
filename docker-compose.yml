@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./chatbot-backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - API_KEY_HEADER=${API_KEY_HEADER}
+      - CORS_ORIGINS=http://localhost:5173,http://localhost:8000
+    volumes:
+      - ./chatbot-backend/logs:/app/logs
+      - ./chatbot-backend/chroma_data:/app/chroma_data
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./chatbot-frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+    depends_on:
+      - backend
+    restart: unless-stopped 

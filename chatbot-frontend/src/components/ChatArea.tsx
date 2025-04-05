@@ -107,6 +107,7 @@ const ChatArea: React.FC<ChatAreaProps> = ({ messages, setMessages }) => {
                 maxW="80%"
                 bg={message.isUser ? userMessageBg : botMessageBg}
                 p={3}
+                pl={4}
                 borderRadius="lg"
                 boxShadow="sm"
               >
