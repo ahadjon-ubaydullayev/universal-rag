@@ -27,17 +27,14 @@ def setup_logger():
                 r'eyJ[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*\.[a-zA-Z0-9_-]*',
             ]
             
-            # Mask each sensitive pattern
             for pattern in sensitive_patterns:
                 message = re.sub(pattern, '***MASKED***', message, flags=re.IGNORECASE)
             
             return message
 
-    # Create logger
     logger = logging.getLogger("rag_chatbot.app")
     logger.setLevel(logging.DEBUG)
 
-    # Create handlers
     console_handler = logging.StreamHandler(sys.stdout)
     console_handler.setLevel(logging.INFO)
     file_handler = RotatingFileHandler(
@@ -48,14 +45,12 @@ def setup_logger():
     )
     file_handler.setLevel(logging.DEBUG)
 
-    # Create formatters and add it to handlers
     formatter = SensitiveDataFormatter(
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     )
     console_handler.setFormatter(formatter)
     file_handler.setFormatter(formatter)
 
-    # Add handlers to the logger
     logger.addHandler(console_handler)
     logger.addHandler(file_handler)
 
@@ -67,7 +62,6 @@ def setup_logger():
 
 app_logger = setup_logger()
 
-# Configure other loggers
 uvicorn_access_logger = logging.getLogger("uvicorn.access")
 uvicorn_access_logger.setLevel(logging.INFO)
 

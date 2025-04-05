@@ -15,10 +15,8 @@ from config import settings
 from security import SecurityMiddleware, sanitize_input
 
 
-# Rate Limiter Configuration
 limiter = Limiter(key_func=get_remote_address)
 
-# Custom rate limit exceeded handler
 async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
     try:
         current_time = time.time()
@@ -98,7 +96,6 @@ class Response(BaseModel):
     response: str
 
 
-# Initialize FastAPI with rate limiter
 app = FastAPI(
     title="RAG Chatbot API",
     description="A simple RAG (Retrieval-Augmented Generation) chatbot API that provides answers based on stored knowledge and predefined responses.",
@@ -107,11 +104,9 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Add rate limiter to the app
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
 
-# Add middleware
 app.add_middleware(SlowAPIMiddleware)
 app.add_middleware(SecurityMiddleware)
 app.add_middleware(

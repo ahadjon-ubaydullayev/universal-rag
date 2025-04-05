@@ -1,16 +1,12 @@
-# Dependencies
 /node_modules
 /.pnp
 .pnp.js
 
-# Testing
 /coverage
 
-# Production
 /dist
 /build
 
-# Misc
 .DS_Store
 .env
 .env.local
@@ -18,13 +14,11 @@
 .env.test.local
 .env.production.local
 
-# Logs
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
-# Editor directories and files
 .idea
 .vscode
 *.suo
@@ -33,8 +27,6 @@ pnpm-debug.log*
 *.sln
 *.sw?
 
-# TypeScript
 *.tsbuildinfo
 
-# Vite
 .vite 

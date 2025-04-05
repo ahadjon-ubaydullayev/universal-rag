@@ -6,15 +6,14 @@ from logger import app_logger
 import json
 from pydantic import field_validator, Field
 
-# Load environment variables
 load_dotenv()
 
 # Debug logging for environment variables
-app_logger.debug("Current working directory: %s", os.getcwd())
-app_logger.debug("Environment variables:")
-for key in ['OPENAI_API_KEY', 'API_KEY']:
-    value = os.getenv(key)
-    app_logger.debug(f"{key}: {'***MASKED***' if value else 'Not set'}")
+# app_logger.debug("Current working directory: %s", os.getcwd())
+# app_logger.debug("Environment variables:")
+# for key in ['OPENAI_API_KEY', 'API_KEY']:
+#     value = os.getenv(key)
+#     app_logger.debug(f"{key}: {'***MASKED***' if value else 'Not set'}")
 
 class Settings(BaseSettings):
     API_KEY: str = os.getenv("OPENAI_API_KEY", "")
